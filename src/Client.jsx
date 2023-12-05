@@ -2,6 +2,23 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Container, Header, NavBar } from "./styleComponents/style";
 import { Grid } from "@mui/material";
 import axios from "axios";
+import bug from "../src/assets/images/bug.svg";
+import dark from "../src/assets/images/dark.svg";
+import dragon from "../src/assets/images/dragon.svg";
+import electric from "../src/assets/images/electric.svg";
+import fairy from "../src/assets/images/fairy.svg";
+import fighting from "../src/assets/images/fighting.svg";
+import fire from "../src/assets/images/fire.svg";
+import flying from "../src/assets/images/flying.svg";
+import ghost from "../src/assets/images/ghost.svg";
+import grass from "../src/assets/images/grass.svg";
+import ground from "../src/assets/images/ground.svg";
+import ice from "../src/assets/images/ice.svg";
+import normal from "../src/assets/images/normal.svg";
+import poison from "../src/assets/images/poison.svg";
+import psychic from "../src/assets/images/psychic.svg";
+import rock from "../src/assets/images/rock.svg";
+import steel from "../src/assets/images/steel.svg";
 import water from "../src/assets/images/water.svg";
 
 function Client() {
@@ -213,6 +230,8 @@ function Client() {
                         <div key={a.type.name}>
                           <button
                             style={{
+                              display: "flex",
+                              justifyContent: "center",
                               color: "#fff",
                               borderRadius: "20px",
                               padding: "5px 10px",
@@ -256,7 +275,49 @@ function Client() {
                                   : null,
                             }}
                           >
-                            <img src={water} alt="" />
+                            <img
+                              width={20}
+                              src={
+                                a.type.name === "normal"
+                                  ? normal
+                                  : a.type.name === "fire"
+                                  ? fire
+                                  : a.type.name === "water"
+                                  ? water
+                                  : a.type.name === "electric"
+                                  ? electric
+                                  : a.type.name === "poison"
+                                  ? poison
+                                  : a.type.name === "grass"
+                                  ? grass
+                                  : a.type.name === "ice"
+                                  ? ice
+                                  : a.type.name === "fighting"
+                                  ? fighting
+                                  : a.type.name === "ground"
+                                  ? ground
+                                  : a.type.name === "flying"
+                                  ? flying
+                                  : a.type.name === "psychic"
+                                  ? psychic
+                                  : a.type.name === "bug"
+                                  ? bug
+                                  : a.type.name === "rock"
+                                  ? rock
+                                  : a.type.name === "ghost"
+                                  ? ghost
+                                  : a.type.name === "dragon"
+                                  ? dragon
+                                  : a.type.name === "dark"
+                                  ? dark
+                                  : a.type.name === "steel"
+                                  ? steel
+                                  : a.type.name === "fairy"
+                                  ? fairy
+                                  : null
+                              }
+                              alt=""
+                            />
                             <p>
                               {language === "en" && a.type.name === "normal"
                                 ? "Normal"
