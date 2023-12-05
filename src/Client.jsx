@@ -1,32 +1,44 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { Container } from "./styleComponents/style";
-import { TextField, IconButton } from "@mui/material";
-import { PhotoCamera } from "@mui/icons-material";
-import { ChromePicker } from "react-color";
-import domtoimage from "dom-to-image";
-import { saveAs } from "file-saver";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
-import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
-import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import DownloadIcon from "@mui/icons-material/Download";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import AddIcon from "@mui/icons-material/Add";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ClearIcon from "@mui/icons-material/Clear";
+import { Container, Header, NavBar } from "./styleComponents/style";
+import { Grid } from "@mui/material";
+
 function Client() {
   return (
     <>
+      <Header>
+        <div className="title">
+          <p>포켓몬 도감</p>
+        </div>
+        <div className="button_box">
+          <button>English</button>
+          <button>한국어</button>
+        </div>
+      </Header>
+      <NavBar>
+        <div className="search_box card">
+          <input type="text" />
+        </div>
+        {/* <div>타입</div> */}
+      </NavBar>
+
       <Container>
         <div className="container">
-          {/* <h1>11</h1>
-          <h2>22</h2>
-          <h3>33</h3>
-          <p>ddd</p> */}
+          <Grid
+            container
+            spacing={{ xs: 5, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+          >
+            {Array.from(Array(7)).map((_, index) => (
+              <Grid item xs={4} sm={4} md={4} key={index}>
+                <div className="card_1 card_style">
+                  <img
+                    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+                    alt="포켓볼"
+                  />
+                </div>
+              </Grid>
+            ))}
+          </Grid>
         </div>
       </Container>
     </>

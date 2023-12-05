@@ -1,49 +1,77 @@
 import styled from "styled-components";
 
-// export const Container = styled.div`
-//   margin: 0 auto;
-//   width: 100%;
-//   min-height: 100vh;
-//   font-family: SF Pro;
-//   font-weight: 100;
-//   text-align: center;
-//   background-color: #282c34;
-//   padding: 20px;
-//   display: flex;
-//   align-items: center;
-//   & > div.box {
-//     width: ${(props) => `calc(${props.props.width} + 42px)`};
-//     border: 1px solid;
-//     min-width: 345px;
-//     max-width: 1340px;
-//     padding: 20px;
-//     background: rgb(255, 255, 255);
-//     margin: 0px auto;
-//   }
-//   & div.top {
-//     margin-bottom: 15px;
-//     display: flex;
-//     gap: 10px;
-//   }
-//   & div.text_con {
-//     width: 100%;
-//     margin-bottom: 15px;
-//     text-align: left;
-//     display: flex;
-//     align-items: center;
-//     gap: 10px;
+// width: ${(props) => `calc(${props.props.width} + 42px)`};
 
-//     flex-wrap: wrap;
-//   }
-//   & div.pickerStyle {
-//     z-index: 2;
-//     position: absolute;
-//     top: 60px;
-//     right: 0;
-//   }
-// `;
+export const Header = styled.div`
+  @media (min-width: 640px) {
+    padding: 20px 40px;
+  }
+
+  @media (min-width: 1024px) {
+  }
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background: #fff;
+  color: #ddd;
+  .button_box {
+    background: red;
+    display: flex;
+  }
+`;
+
+export const NavBar = styled.div`
+  @media (min-width: 640px) {
+    .container {
+      padding: 15px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
+      padding: 20px;
+    }
+  }
+  & > div.search_box {
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin: 30px auto;
+    width: 80%;
+  }
+  & > div input {
+    border: none;
+    width: 100%;
+    padding: 10px;
+  }
+  & > div input:focus-visible {
+    outline: none;
+  }
+`;
 
 export const Container = styled.div`
-  /* & > div.box {
-  } */
+  .container {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  & > .container > div {
+    min-height: 400px;
+  }
+  .card_style {
+    height: 250px;
+    border-radius: 20px;
+    padding: 20px;
+  }
+  @media (min-width: 640px) {
+    .container {
+      padding: 25px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
+      padding: 45px;
+    }
+  }
 `;
