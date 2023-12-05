@@ -64,6 +64,14 @@ export const Container = styled.div`
     border-radius: 20px;
     padding: 20px;
   }
+  .title_box {
+    display: flex;
+  }
+  .img_box {
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+  }
   @media (min-width: 640px) {
     .container {
       padding: 25px;
