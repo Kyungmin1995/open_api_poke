@@ -101,9 +101,9 @@ button {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-.card_1:hover {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-}
+/* .card_1:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgb(47 124 187);
+} */
 
 body {
   margin: 0;
@@ -131,6 +131,125 @@ body {
   background: #000;
   margin: 0 auto;
   padding: 10px;
+}
+
+.dot-bottom,
+.dot-top,
+.dot-top-bottom,
+.dot-bottom-top {
+  position: relative;
+}
+.dot-bottom span,
+.dot-top-bottom span,
+.dot-bottom-top span,
+.dot-top span {
+  background: #fff;
+  text-indent: -9999px;
+  width: 5px;
+  height: 5px;
+}
+
+.dot-bottom-top span:first-child,
+.dot-bottom span:first-child,
+.dot-top span:first-child {
+  position: absolute;
+  left: -1.5px;
+  top: -2px;
+}
+.dot-bottom-top span:last-child,
+.dot-bottom span:last-child,
+.dot-top span:last-child {
+  position: absolute;
+  right: -1.5px;
+  top: -2px;
+}
+.dot-top-bottom span:first-child {
+  background: #000;
+  left: 2px;
+  bottom: -10px;
+  position: absolute;
+}
+.dot-top-bottom span:last-child {
+  background: #000;
+  right: 2px;
+  bottom: -10px;
+  position: absolute;
+}
+.dot-bottom-top span:first-child {
+  position: absolute;
+  left: 1px;
+  top: -6px;
+  background: #000;
+  width: 4px;
+  height: 4px;
+}
+.dot-bottom-top span:last-child {
+  position: absolute;
+  right: 1px;
+  top: -6px;
+  background: #000;
+  width: 4px;
+  height: 4px;
+}
+
+.card_style {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.statusbar {
+  padding: 10px;
+  background: #fff;
+  border-radius: 5px;
+  /* min-width: 339px;
+  max-width: 400px; */
+  font-family: "Pokemon";
+  /* margin: 50px auto 0; */
+}
+.btn {
+  animation: game 0.5s infinite;
+  cursor: pointer;
+}
+.statusbar > div img {
+  animation: game 1.5s 2s infinite;
+}
+
+.statusbar > div:first-child {
+  border-radius: 5px;
+  padding-bottom: 10px;
+}
+.statusbar > div:last-child {
+  border-radius: 5px;
+  border: 3px solid #000;
+  padding: 4px;
+  border-bottom: 5px solid #000;
+}
+.statusbar > div > div.txtBox {
+  background: #fff;
+  border-radius: 5px;
+  border: 3px solid #000;
+  border-top: 6px solid #000;
+  border-left: 3.5px solid;
+  border-right: 3.5px solid;
+  color: #000;
+  padding: 6px;
+}
+
+.statusbar > div > div:last-child p {
+  opacity: 1;
+}
+@keyframes game {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@font-face {
+  font-family: "pokemon";
+  src: url(./assets/fonts/pokemon.ttf);
 }
 
 @media (min-width: 640px) {

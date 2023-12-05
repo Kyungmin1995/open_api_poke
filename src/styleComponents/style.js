@@ -48,6 +48,10 @@ export const NavBar = styled.div`
 `;
 
 export const Container = styled.div`
+  .card_1:hover {
+    box-shadow: ${(props) =>
+      `0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px ${props.props.color}`};
+  }
   .container {
     padding: 15px;
     display: flex;
@@ -60,22 +64,52 @@ export const Container = styled.div`
     min-height: 400px;
   }
   .card_style {
-    height: 250px;
     border-radius: 20px;
     padding: 20px;
+    min-height: 320px;
   }
   .title_box {
     display: flex;
     align-items: center;
   }
+  .title_box > p {
+    font-family: "pokemon";
+  }
+  .txtBox > p {
+    font-family: "pokemon";
+    word-break: break-word;
+  }
   .img_box {
     display: flex;
     justify-content: center;
-    padding: 50px;
+    padding: 20px;
+  }
+
+  .type_box {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 10px;
+  }
+  .type_box > div {
+    width: 100%;
+  }
+  .type_box > div button {
+    width: 100%;
   }
   @media (min-width: 640px) {
     .container {
       padding: 25px;
+    }
+    .img_box {
+      display: flex;
+      justify-content: center;
+      padding: 50px;
+    }
+    .card_style {
+      border-radius: 20px;
+      padding: 20px;
+      min-height: 450px;
     }
   }
   @media (min-width: 1024px) {
