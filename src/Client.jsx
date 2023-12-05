@@ -5,17 +5,16 @@ import axios from "axios";
 
 function Client() {
   const [data, setData] = useState([]);
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState("ko");
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [language]);
 
   const getData = useCallback(async () => {
     try {
       const res = await axios.get(
         `https://pokeapi.co/api/v2/pokemon?offset=0&limit=10`
-        // `https://pokeapi.co/api/v2/pokemon-species/1/`
       );
       const dataWithImages = await Promise.all(
         res.data.results.map(async (a, i) => {
@@ -25,7 +24,7 @@ function Client() {
             name: a.name,
             url: a.url,
             imgUrl,
-            id: speciesUrl,
+            nameKo: speciesUrl,
           };
         })
       );
@@ -63,6 +62,13 @@ function Client() {
     [data]
   );
 
+  const changeLanguage = useCallback(
+    (type) => {
+      setLanguage(type);
+    },
+    [language]
+  );
+
   useEffect(() => {
     console.log(data, "data");
   }, [data]);
@@ -74,8 +80,20 @@ function Client() {
           <p>포켓몬 도감</p>
         </div>
         <div className="button_box">
-          <button>English</button>
-          <button>한국어</button>
+          <button
+            onClick={() => {
+              changeLanguage("en");
+            }}
+          >
+            English
+          </button>
+          <button
+            onClick={() => {
+              changeLanguage("ko");
+            }}
+          >
+            한국어
+          </button>
         </div>
       </Header>
       <NavBar>
@@ -97,7 +115,7 @@ function Client() {
                 <Grid item xs={4} sm={4} md={4} key={index}>
                   <div className="card_1 card_style">
                     <div className="title_box">
-                      <p>{_.name}</p>
+                      <p>{language === "en" ? _.name : _.nameKo}</p>
                       <img
                         src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
                         alt="포켓볼"

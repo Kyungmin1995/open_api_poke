@@ -66,6 +66,7 @@ export const Container = styled.div`
   }
   .title_box {
     display: flex;
+    align-items: center;
   }
   .img_box {
     display: flex;
