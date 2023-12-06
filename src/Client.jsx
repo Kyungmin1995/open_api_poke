@@ -22,28 +22,120 @@ import steel from "../src/assets/images/steel.svg";
 import water from "../src/assets/images/water.svg";
 import { useQuery } from "react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
+import SearchIcon from "@mui/icons-material/Search";
 
 function Client() {
+  // 세대별 offset & limit
+  const generationArr = [
+    { generation: "1 세대", offset: 0, limit: 151 },
+    { generation: "2 세대", offset: 152, limit: 251 },
+    { generation: "3 세대", offset: 252, limit: 385 },
+    { generation: "4 세대", offset: 386, limit: 492 },
+    { generation: "5 세대", offset: 493, limit: 648 },
+    // { generation: "6 세대", offset: 649, limit: 720 },
+    // { generation: "7 세대", offset: 721, limit: 808 },
+  ];
+  const [generation, setGeneration] = useState({
+    offset: 0,
+    limit: 151,
+  });
+
+  // 검색
+  const [searchData, setSearchData] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [searchClear, setSearchClear] = useState(false);
+
+  // 포켓몬 데이터
   const [pokeData, setpokeData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [limit, setLimit] = useState(20);
   const [language, setLanguage] = useState("ko");
   const [color, setColor] = useState({
     color: "rgb(47 124 187)",
   });
 
+  useEffect(() => {
+    const getAllData = async () => {
+      try {
+        const res = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon?offset=${generation.offset}&limit=${generation.limit}`
+        );
+
+        const dataWithImages = await Promise.all(
+          res.data.results.map(async (a, i) => {
+            const imgUrl = await getPoketmon(a.url);
+            const speciesUrl = await getPoketmonName(
+              parseInt(a.url.split("/").filter(Boolean).pop(), 10) - 1
+            );
+
+            return {
+              ID: parseInt(a.url.split("/").filter(Boolean).pop(), 10),
+              id: i + 1,
+              name: a.name,
+              url: a.url,
+              imgUrl: imgUrl.imgUrl,
+              property: imgUrl.property,
+              nameKo: speciesUrl.name,
+              script:
+                language === "ko"
+                  ? "앗! 야생의 \u00A0" + speciesUrl.name + "(이)가 나타났다!"
+                  : "Oh! A wild \u00A0" + a.name + "appeared!",
+              // description: speciesUrl.flavor_text,
+              type: speciesUrl.type,
+            };
+          })
+        );
+        const allArr = [];
+        allArr.push(
+          ...dataWithImages.map((a) =>
+            language === "ko"
+              ? { name: a.nameKo, id: a.ID }
+              : { name: a.name, id: a.ID }
+          )
+        );
+
+        const copy = allArr.map((a) => ({ id: a.id, name: a.name }));
+        console.log(copy, "map");
+
+        if (copy.filter((i) => i.name === searchValue).length !== 0) {
+          setSearchData(copy.filter((i) => i.name === searchValue)[0].id - 1);
+        }
+
+        if (searchData !== null) setHasMore(false);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAllData();
+
+    return () => setSearchClear(false);
+  }, [language, searchClear, searchData]);
+
   const getData = useCallback(async () => {
     try {
-      // setIsLoading(false); // 데이터 로딩 시작
       const res = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon?offset=0&limit=${limit}`
+        searchData == null
+          ? `https://pokeapi.co/api/v2/pokemon?offset=${generation.offset}&limit=${limit}`
+          : `https://pokeapi.co/api/v2/pokemon?offset=${searchData}&limit=1`
       );
+      if (res.data.results.length >= generation.limit + 1) {
+        setHasMore(false);
+      }
+      // console.log(res.data.results, "111");
       const dataWithImages = await Promise.all(
         res.data.results.map(async (a, i) => {
           const imgUrl = await getPoketmon(a.url);
-          const speciesUrl = await getPoketmonName(i);
+          // const speciesUrl = await getPoketmonName(
+          //   searchData === null ? i : searchData
+          // );
+          const speciesUrl = await getPoketmonName(
+            searchData === null
+              ? parseInt(a.url.split("/").filter(Boolean).pop(), 10) - 1
+              : searchData
+          );
+
           return {
+            ID: parseInt(a.url.split("/").filter(Boolean).pop(), 10),
             name: a.name,
             url: a.url,
             imgUrl: imgUrl.imgUrl,
@@ -53,29 +145,24 @@ function Client() {
               language === "ko"
                 ? "앗! 야생의 \u00A0" + speciesUrl.name + "(이)가 나타났다!"
                 : "Oh! A wild \u00A0" + a.name + "appeared!",
-            description: speciesUrl.flavor_text,
+            // description: speciesUrl.flavor_text,
             type: speciesUrl.type,
           };
         })
       );
-
-      if (res.data.results.length === 0) {
-        setHasMore(false); // 더 이상 가져올 데이터가 없음
-        console.log("getData function called"); // 확인을 위한 로그
-      }
-
+      console.log(dataWithImages, "22");
       setpokeData(dataWithImages);
     } catch (err) {
       console.log(err);
-    } finally {
-      // setIsLoading(true); // 데이터 로딩 완료
     }
-  }, [pokeData, language, limit]);
+  }, [pokeData, language, limit, searchClear, searchData, generation]);
 
   const getPoketmon = useCallback(
     async (url) => {
+      // console.log(url);
       try {
         const res = await axios.get(url);
+
         const data = {
           imgUrl:
             res.data.sprites.versions["generation-v"]["black-white"].animated
@@ -97,31 +184,30 @@ function Client() {
         const res = await axios.get(
           "https://pokeapi.co/api/v2/pokemon-species/" + parseInt(id + 1) + "/"
         );
-
         const data = {
           name: res.data.names[2].name,
           type:
             language === "ko"
               ? res.data.genera[1].genus
               : res.data.genera[7].genus,
-          flavor_text:
-            res.data.flavor_text_entries[
-              (language === "ko" && parseInt(id + 1) === 10) ||
-              (language === "ko" && parseInt(id + 1) === 15) ||
-              (language === "ko" && parseInt(id + 1) === 19) ||
-              (language === "ko" && parseInt(id + 1) === 20)
-                ? 24
-                : language === "ko"
-                ? 23
-                : (language === "en" && parseInt(id + 1) === 10) ||
-                  (language === "en" && parseInt(id + 1) === 15) ||
-                  (language === "en" && parseInt(id + 1) === 19) ||
-                  (language === "en" && parseInt(id + 1) === 20)
-                ? 1
-                : language === "en"
-                ? 0
-                : null
-            ].flavor_text,
+          // flavor_text:
+          //   res.data.flavor_text_entries[
+          //     (language === "ko" && parseInt(id + 1) === 10) ||
+          //     (language === "ko" && parseInt(id + 1) === 15) ||
+          //     (language === "ko" && parseInt(id + 1) === 19) ||
+          //     (language === "ko" && parseInt(id + 1) === 20)
+          //       ? 24
+          //       : language === "ko"
+          //       ? 23
+          //       : (language === "en" && parseInt(id + 1) === 10) ||
+          //         (language === "en" && parseInt(id + 1) === 15) ||
+          //         (language === "en" && parseInt(id + 1) === 19) ||
+          //         (language === "en" && parseInt(id + 1) === 20)
+          //       ? 1
+          //       : language === "en"
+          //       ? 0
+          //       : null
+          //   ].flavor_text,
         };
         return data;
       } catch (err) {
@@ -140,11 +226,19 @@ function Client() {
 
   useEffect(() => {
     getData();
-  }, [limit]);
+  }, [limit, searchData, searchClear, generation]);
 
   const handleInfiniteScroll = () => {
     setLimit((prevLimit) => prevLimit + 10);
   };
+
+  const searchHandle = useCallback(
+    (e) => {
+      // console.log(e.target.value);
+      setSearchValue(e.target.value);
+    },
+    [searchValue]
+  );
 
   return (
     <>
@@ -152,7 +246,11 @@ function Client() {
         dataLength={pokeData.length}
         next={handleInfiniteScroll}
         hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
+        loader={
+          <h4 style={{ textAlign: "center", marginBottom: "20px" }}>
+            {hasMore && "  Loading..."}
+          </h4>
+        }
         scrollToTop={false}
       >
         <>
@@ -178,8 +276,44 @@ function Client() {
             </div>
           </Header>
           <NavBar>
-            <div className="search_box card">
-              <input type="text" />
+            {/* 세대 */}
+            <div style={{ textAlign: "center" }}>
+              {generationArr.map((a, i) => {
+                return (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      // setSearchData(a.offset);
+                      setSearchData(null);
+                      setGeneration((state) => ({
+                        ...state,
+                        offset: a.offset,
+                        limit: a.limit,
+                      }));
+                    }}
+                  >
+                    {a.generation}
+                  </button>
+                );
+              })}
+            </div>
+            <div
+              className="search_box card"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <input type="text" value={searchValue} onChange={searchHandle} />
+              <SearchIcon
+                style={{
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  if (searchValue === "") setSearchData(null);
+                  setSearchClear(true);
+                }}
+              />
             </div>
             {/* <div>타입</div> */}
           </NavBar>
@@ -244,7 +378,7 @@ function Client() {
                             alt="포켓볼"
                           />
                         </div>
-                        <p>{"No." + parseInt(index + 1)}</p>
+                        <p>{"No." + _.ID}</p>
                         <div className="img_box">
                           <img src={_.imgUrl} alt="포켓몬" />
                         </div>
