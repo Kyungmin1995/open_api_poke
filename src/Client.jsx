@@ -1,18 +1,20 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { Grid } from "@mui/material";
+import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 
-import { useQueries, useQuery, useQueryClient } from "react-query";
+import { useQueryClient, useQuery } from "react-query";
 
 import { Header } from "./styleComponents/Header";
 import { NavBar } from "./styleComponents/NavBar";
 import { Contents } from "./styleComponents/Contents";
 import useInfiniteScroll from "./hooks/useInfiniteScroll";
+import useInputState from "./hooks/useInputState";
+
+import { Loading } from "./components/Loading";
 
 function Client() {
-  const [color, setColor] = useState({
+  const color = {
     color: "rgb(47 124 187)",
-  });
+  };
   // 세대별 offset & limit
   const generationArr = [
     { generation: "1 세대", offset: 1, limit: 151 },
@@ -25,29 +27,18 @@ function Client() {
     offset: 1,
     limit: 151,
   });
+  const [state, updateState] = useInputState("");
 
-  // 검색
-  const [searchData, setSearchData] = useState(null);
-  const [searchValue, setSearchValue] = useState("");
-  const [searchClear, setSearchClear] = useState(false);
+  const [selectPoketMon, setSelectPoketMon] = useState("");
 
-  // 포켓몬 데이터
+  // 언어변경 store 연결필요
   const [language, setLanguage] = useState("ko");
 
-  //언어변경
   const changeLanguage = useCallback(
     (type) => {
       setLanguage(type);
     },
     [language]
-  );
-
-  //검색창 이벤트
-  const searchHandle = useCallback(
-    (e) => {
-      setSearchValue(e.target.value);
-    },
-    [searchValue]
   );
 
   //포켓몬 세대별 데이터 가져오기
@@ -102,6 +93,7 @@ function Client() {
               pokeData_2.sprites.versions["generation-v"]["black-white"]
                 .animated.front_default,
           };
+
           return processData;
         })
       );
@@ -112,68 +104,73 @@ function Client() {
     }
   }, [generation]);
 
-  //리액트쿼리
-  const {
-    data = [],
-    isLoading,
-    error,
-  } = useQuery(["dataArr", generation], getData, {
-    staleTime: 60000,
-    refetchOnWindowFocus: false,
-  });
-
   const OFFSET = 10;
   const [page, setPage] = useState(1);
+
+  //리액트쿼리
+  const { data = [], isLoading } = useQuery(["dataArr", generation], getData, {
+    staleTime: 60000,
+    refetchOnWindowFocus: false,
+    select: useCallback(
+      (data) => {
+        // console.log(data[0]?.sprites.versions);
+
+        return selectPoketMon !== ""
+          ? data.filter((a) => a.name_KO === selectPoketMon)
+          : data;
+        return data;
+      },
+      [selectPoketMon]
+    ),
+  });
+
+  //무한스크롤
   const hasMorePage = Boolean(data.length > page * OFFSET);
   const ElementRef = useInfiniteScroll(hasMorePage, setPage);
 
-  if (isLoading) return <p>로딩..</p>;
+  // 검색바
+  const [searchTerm, setSearchTerm] = useState("");
+  const [displayState, setDisplayState] = useState("");
+
+  if (isLoading) return <Loading />;
+
   return (
     <>
-      <>
-        <Header changeLanguage={changeLanguage} />
-
-        <NavBar
-          generationArr={generationArr}
-          setSearchData={setSearchData}
-          setGeneration={setGeneration}
-          searchValue={searchValue}
-          searchHandle={searchHandle}
-          setSearchClear={setSearchClear}
-        />
-
-        {/* <div className="container">
-          <Grid
-            container
-            spacing={{ xs: 5, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
-          >
-            {data.slice(0, page * 10).map((_, index) => {
-              return (
-                <Grid item xs={4} sm={4} md={4} key={index}>
-                  <div className="card_1 card_style" ref={ElementRef}>
-                    <div className="title_box">
-                      <p>{language === "en" ? _.name : _.name_KO}</p>
-                      <img
-                        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
-                        alt="포켓볼"
-                      />
-                    </div>
-                    <p>{"No." + _.id}</p>
-                    <div className="img_box">
-                      <img src={_.imgUrl} alt="포켓몬" />
-                    </div>
-                    <DotBox
-                      language={language}
-                      name={_.name}
-                      name_KO={_.name_KO}
-                    />
-                  </div>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </div> */}
+      <div
+        onClick={() => {
+          console.log("dd");
+          setSearchTerm(""); //검색 초기화
+        }}
+      >
+        <div
+          style={{
+            position: "fixed",
+            width: "100%",
+            zIndex: "99",
+          }}
+        >
+          <Header
+            changeLanguage={changeLanguage}
+            setSelectPoketMon={setSelectPoketMon}
+            setSearchTerm={setSearchTerm}
+            generationArr={generationArr}
+            setGeneration={setGeneration}
+          />
+          <NavBar
+            generationArr={generationArr}
+            generation={generation}
+            setGeneration={setGeneration}
+            state={state}
+            updateState={updateState}
+            getData={getData}
+            setSelectPoketMon={setSelectPoketMon}
+            setPage={setPage}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            displayState={displayState}
+            setDisplayState={setDisplayState}
+          />
+        </div>
 
         <Contents
           data={data}
@@ -182,7 +179,7 @@ function Client() {
           language={language}
           ElementRef={ElementRef}
         />
-      </>
+      </div>
     </>
   );
 }

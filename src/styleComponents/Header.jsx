@@ -1,12 +1,44 @@
 import React from "react";
 import styled from "styled-components";
 
-export const Header = ({ changeLanguage }) => {
+export const Header = ({
+  changeLanguage,
+  setSelectPoketMon,
+  setSearchTerm,
+  setGeneration,
+  generationArr,
+}) => {
   return (
     <HeaderContainer>
       <div className="title">
         <p>포켓몬 도감</p>
       </div>
+
+      <div style={{ textAlign: "center", display: "flex", gap: "10px" }}>
+        {generationArr.map((a, i) => {
+          return (
+            <button
+              key={i}
+              style={{
+                borderRadius: "10px",
+                background: "#ddd",
+              }}
+              onClick={() => {
+                setSelectPoketMon("");
+                setSearchTerm(""); //검색 초기화
+                setGeneration((state) => ({
+                  ...state,
+                  offset: a.offset,
+                  limit: a.limit,
+                }));
+              }}
+            >
+              {a.generation}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="button_box">
         <button
           onClick={() => {
@@ -38,7 +70,10 @@ export const HeaderContainer = styled.div`
   justify-content: space-between;
   padding: 20px;
   background: #fff;
-  color: #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+  /* color: #fff; */
+  z-index: 5;
   .button_box {
     background: red;
     display: flex;

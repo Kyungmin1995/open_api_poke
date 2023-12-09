@@ -22,40 +22,42 @@ import water from "../../src/assets/images/water.svg";
 
 export const Contents = ({ data, page, color, language, ElementRef }) => {
   return (
-    <ContentsContainer props={{ color: color.color[0] }}>
-      <div className="container">
-        <Grid
-          container
-          spacing={{ xs: 5, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {data.slice(0, page * 10).map((_, index) => {
-            return (
-              <Grid item xs={4} sm={4} md={4} key={index}>
-                <div className="card_1 card_style" ref={ElementRef}>
-                  <div className="title_box">
-                    <p>{language === "en" ? _.name : _.name_KO}</p>
-                    <img
-                      src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
-                      alt="포켓볼"
+    <>
+      <ContentsContainer props={{ color: color.color[0] }}>
+        <div className="container">
+          <Grid
+            container
+            spacing={{ xs: 5, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+          >
+            {data.slice(0, page * 10).map((_, index) => {
+              return (
+                <Grid item xs={4} sm={4} md={4} key={index}>
+                  <div className="card_1 card_style" ref={ElementRef}>
+                    <div className="title_box">
+                      <p>{language === "en" ? _.name : _.name_KO}</p>
+                      <img
+                        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+                        alt="포켓볼"
+                      />
+                    </div>
+                    <p>{"No." + _.id}</p>
+                    <div className="img_box">
+                      <img src={_.imgUrl} alt="포켓몬" />
+                    </div>
+                    <DotBox
+                      language={language}
+                      name={_.name}
+                      name_KO={_.name_KO}
                     />
                   </div>
-                  <p>{"No." + _.id}</p>
-                  <div className="img_box">
-                    <img src={_.imgUrl} alt="포켓몬" />
-                  </div>
-                  <DotBox
-                    language={language}
-                    name={_.name}
-                    name_KO={_.name_KO}
-                  />
-                </div>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </div>
-    </ContentsContainer>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </div>
+      </ContentsContainer>
+    </>
   );
 };
 
@@ -109,6 +111,7 @@ const DotBox = ({ language, name, name_KO }) => {
 };
 
 export const ContentsContainer = styled.div`
+  padding-top: 140px;
   .card_1:hover {
     box-shadow: ${(props) =>
       `0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px ${props.props.color}`};
