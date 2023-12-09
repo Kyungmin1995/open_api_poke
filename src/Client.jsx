@@ -138,7 +138,6 @@ function Client() {
     <>
       <div
         onClick={() => {
-          console.log("dd");
           setSearchTerm(""); //검색 초기화
         }}
       >

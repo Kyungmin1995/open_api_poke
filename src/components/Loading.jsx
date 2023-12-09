@@ -59,10 +59,11 @@ export const LoadingContainer = styled.div`
   width: 100%;
   height: 100vh;
   & > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .animation_1 {

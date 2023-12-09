@@ -10,7 +10,13 @@ export const Header = ({
 }) => {
   return (
     <HeaderContainer>
-      <div className="title">
+      <div
+        className="title"
+        onClick={() => {
+          setSelectPoketMon("");
+          console.log("dd");
+        }}
+      >
         <p>포켓몬 도감</p>
       </div>
 
@@ -39,7 +45,7 @@ export const Header = ({
         })}
       </div>
 
-      <div className="button_box">
+      {/* <div className="button_box">
         <button
           onClick={() => {
             changeLanguage("en");
@@ -54,7 +60,7 @@ export const Header = ({
         >
           한국어
         </button>
-      </div>
+      </div> */}
     </HeaderContainer>
   );
 };
