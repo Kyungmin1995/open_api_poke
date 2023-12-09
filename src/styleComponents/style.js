@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-// width: ${(props) => `calc(${props.props.width} + 42px)`};
-
 export const Header = styled.div`
   @media (min-width: 640px) {
     padding: 20px 40px;

@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path="*" element={<Client />} />
         </Routes>
-        {/* <ReactQueryDevtools /> */}
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </>
   );
