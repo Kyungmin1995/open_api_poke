@@ -14,10 +14,9 @@ export const Header = ({
         className="title"
         onClick={() => {
           setSelectPoketMon("");
-          console.log("dd");
         }}
       >
-        <p>포켓몬 도감</p>
+        <h3>포켓몬 도감</h3>
       </div>
 
       <div style={{ textAlign: "center", display: "flex", gap: "10px" }}>
@@ -27,7 +26,7 @@ export const Header = ({
               key={i}
               style={{
                 borderRadius: "10px",
-                background: "#ddd",
+                background: "#fff",
               }}
               onClick={() => {
                 setSelectPoketMon("");
@@ -39,7 +38,11 @@ export const Header = ({
                 }));
               }}
             >
-              {a.generation}
+              <img
+                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+                alt="포켓볼"
+              />
+              {/* {a.generation} */}
             </button>
           );
         })}
@@ -66,6 +69,7 @@ export const Header = ({
 };
 
 export const HeaderContainer = styled.div`
+  align-items: center;
   @media (min-width: 640px) {
     padding: 20px 40px;
   }

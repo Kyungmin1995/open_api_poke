@@ -16,6 +16,7 @@ export const NavBar = ({
   setSearchTerm,
   displayState,
   setDisplayState,
+  scrollState,
 }) => {
   const { data, isLoading } = useQuery(["searchArr", generation], getData, {
     staleTime: 60000,
@@ -102,6 +103,11 @@ export const NavBar = ({
           onClick={(e) => {
             e.stopPropagation();
           }}
+          style={
+            {
+              // scrollState
+            }
+          }
         />
 
         <SearchIcon

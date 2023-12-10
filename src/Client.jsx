@@ -10,8 +10,11 @@ import useInfiniteScroll from "./hooks/useInfiniteScroll";
 import useInputState from "./hooks/useInputState";
 
 import { Loading } from "./components/Loading";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { Detail } from "./components/Detail";
 
 function Client() {
+  const navigate = useNavigate();
   const color = {
     color: "rgb(47 124 187)",
   };
@@ -92,6 +95,8 @@ function Client() {
             imgUrl:
               pokeData_2.sprites.versions["generation-v"]["black-white"]
                 .animated.front_default,
+            officialArtwork:
+              pokeData_2?.sprites.other["official-artwork"].front_default,
           };
 
           return processData;
@@ -113,7 +118,7 @@ function Client() {
     refetchOnWindowFocus: false,
     select: useCallback(
       (data) => {
-        // console.log(data[0]?.sprites.versions);
+        // console.log(data);
 
         return selectPoketMon !== ""
           ? data.filter((a) => a.name_KO === selectPoketMon)
@@ -131,54 +136,80 @@ function Client() {
   // 검색바
   const [searchTerm, setSearchTerm] = useState("");
   const [displayState, setDisplayState] = useState("");
+  const [scrollState, setScrollState] = useState(false);
+
+  // const handleScroll = () => {
+  //   const scrollY = window.scrollY;
+  //   if (scrollY >= 80) {
+  //     console.log("스크롤 50px 이상 내려갔습니다.");
+  //     setScrollState(true);
+  //   } else {
+  //     setScrollState(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   // 스크롤 이벤트 리스너 등록
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
+  const goDetail = (id) => {
+    navigate("/detail/" + id);
+  };
 
   if (isLoading) return <Loading />;
 
   return (
     <>
-      <div
-        onClick={() => {
-          setSearchTerm(""); //검색 초기화
-        }}
-      >
-        <div
-          style={{
-            position: "fixed",
-            width: "100%",
-            zIndex: "99",
-          }}
-        >
-          <Header
-            changeLanguage={changeLanguage}
-            setSelectPoketMon={setSelectPoketMon}
-            setSearchTerm={setSearchTerm}
-            generationArr={generationArr}
-            setGeneration={setGeneration}
-          />
-          <NavBar
-            generationArr={generationArr}
-            generation={generation}
-            setGeneration={setGeneration}
-            state={state}
-            updateState={updateState}
-            getData={getData}
-            setSelectPoketMon={setSelectPoketMon}
-            setPage={setPage}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            displayState={displayState}
-            setDisplayState={setDisplayState}
-          />
-        </div>
-
-        <Contents
-          data={data}
-          page={page}
-          color={color}
-          language={language}
-          ElementRef={ElementRef}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div
+              onClick={() => {
+                setSearchTerm(""); //검색 초기화
+              }}
+            >
+              <Header
+                changeLanguage={changeLanguage}
+                setSelectPoketMon={setSelectPoketMon}
+                setSearchTerm={setSearchTerm}
+                generationArr={generationArr}
+                setGeneration={setGeneration}
+              />
+              <NavBar
+                generationArr={generationArr}
+                generation={generation}
+                setGeneration={setGeneration}
+                state={state}
+                updateState={updateState}
+                getData={getData}
+                setSelectPoketMon={setSelectPoketMon}
+                setPage={setPage}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                displayState={displayState}
+                setDisplayState={setDisplayState}
+                scrollState={scrollState}
+              />
+              <Contents
+                data={data}
+                page={page}
+                color={color}
+                language={language}
+                ElementRef={ElementRef}
+                goDetail={goDetail}
+              />
+            </div>
+          }
         />
-      </div>
+        <Route
+          path="/detail/:id"
+          element={<Detail data={data} navigate={navigate} />}
+        />
+      </Routes>
     </>
   );
 }
