@@ -3,9 +3,9 @@
 ## 소개
 
 ```
-poke_api + react 로 만든 포켓몬 도감 
+poke_api + react 로 만든 포켓몬 도감
+reactquery 를 이용한 세대별 포켓몬 데이터 캐싱,무한스크롤
 ```
-
 
 
 
