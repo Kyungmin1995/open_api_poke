@@ -7,6 +7,7 @@
 ```
 <div align="center">
 	<img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=white" />
+	<img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=Vite&logoColor=white" />
 	
 	
 
