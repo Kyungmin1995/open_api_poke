@@ -20,3 +20,5 @@ reactquery 를 이용한 세대별 포켓몬 데이터 캐싱,무한스크롤
 
 ## 실행화면
 -------------------------
+![1](https://github.com/rudals95/open_api_poke/assets/97620951/60493673-8e49-45ce-8b46-652c1280bc22)
+![2](https://github.com/rudals95/open_api_poke/assets/97620951/477db68f-e7ae-42ef-96c7-0431689a5657)
