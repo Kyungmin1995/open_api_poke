@@ -10,7 +10,6 @@ reactquery 를 이용한 세대별 포켓몬 데이터 캐싱,무한스크롤
 
 
 ## 개발환경
--------------------------
 <div align="center">
 	<img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=white" />
 	<img src="https://img.shields.io/badge/reactquery-FF4154?style=flat&logo=reactquery&logoColor=white" />
